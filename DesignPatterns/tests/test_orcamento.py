@@ -59,14 +59,14 @@ def test_caso_orcamento_custar_mais_que_500_reais_calcular_maxima_taxacao_ICPP(i
 
     imposto = calculador_de_impostos.realiza_calculo(orcamento,ICPP())
 
-    assert format(191.1,'.2f') == imposto
+    assert format(191.1,'.2f') == format(imposto,'.2f')
 
 def test_caso_orcamento_custar_menos_ou_igual_a_500_reais_calcular_minima_taxacao_ICPP(itens_baratos,calculador_de_impostos):
     orcamento = Orcamento(itens_baratos)
 
     imposto = calculador_de_impostos.realiza_calculo(orcamento,ICPP())
 
-    assert format(5.0,'.2f') == imposto
+    assert format(5.0,'.2f') == format(imposto,'.2f')
 
 
 def test_caso_orcamento_custar_mais_que_500_reais_e_tiver_um_item_que_vale_mais_de_100_reais_calcular_maxima_taxacao_IKCV(itens,calculador_de_impostos):
@@ -74,11 +74,18 @@ def test_caso_orcamento_custar_mais_que_500_reais_e_tiver_um_item_que_vale_mais_
 
     imposto = calculador_de_impostos.realiza_calculo(orcamento,IKCV())
 
-    assert format(273,'.2f') == imposto
+    assert format(273,'.2f') == format(imposto,'.2f')
 
-def test_caso_orcamento_custar_menos_ou_igual_a_500_reais_ou_nao_tiver_um_item_que_vale_mais_de_100_reais_calcular_minima_taxacao_IKCV(itens_baratos,calculador_de_impostos):
+def test_caso_orcamento_custar_menos_ou_igual_a_500_reais_ou_nao_tiver_um_item_que_vale_mais_de_100_reais_calcular_minima_taxacao_IKCV_com_ICPP(itens_baratos,calculador_de_impostos):
     orcamento = Orcamento(itens_baratos)
 
-    imposto = calculador_de_impostos.realiza_calculo(orcamento,IKCV())
+    imposto = calculador_de_impostos.realiza_calculo(orcamento,IKCV(ICPP()))
 
-    assert format(6.0,'.2f') == imposto
+    assert format(11.0,'.2f') == format(imposto,'.2f')
+
+def test_caso_orcamento_custar_menos_ou_igual_a_500_reais_ou_nao_tiver_um_item_que_vale_mais_de_100_reais_calcular_minima_taxacao_ISS_com_ICMS(itens_baratos,calculador_de_impostos):
+    orcamento = Orcamento(itens_baratos)
+
+    imposto = calculador_de_impostos.realiza_calculo(orcamento,ISS(ICMS()))
+
+    assert format(66.0,'.2f') == format(imposto,'.2f')
