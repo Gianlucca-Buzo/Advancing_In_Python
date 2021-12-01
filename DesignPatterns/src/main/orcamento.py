@@ -23,7 +23,7 @@ class Orcamento(object):
     return len(self.__itens)
 
   def aplica_desconto(self):
-
+    pass
 
 class Item():
 

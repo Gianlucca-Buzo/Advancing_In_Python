@@ -35,3 +35,10 @@ def test_caso_orcamento_tiver_mais_de_3_itens_aplicar_10_por_cento_de_desconto(i
     valor_com_desconto = calculador_de_descontos.calcula(orcamento)
     valor_desejado = 300.0
     assert valor_desejado == valor_com_desconto
+
+def test_caso_orcamento_nao_corresponda_as_regras_de_desconto_deve_retornar_desconto_zero(calculador_de_descontos):
+    orcamento = Orcamento([Item("Tenis",230.0)])
+
+    desconto = calculador_de_descontos.calcula(orcamento)
+
+    assert 0 == desconto
