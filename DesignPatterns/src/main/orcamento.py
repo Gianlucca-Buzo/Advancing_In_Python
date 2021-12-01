@@ -22,6 +22,10 @@ class Orcamento(object):
   def total_itens(self):
     return len(self.__itens)
 
+  @property
+  def itens(self):
+    return self.__itens
+
   def aplica_desconto(self):
     pass
 
