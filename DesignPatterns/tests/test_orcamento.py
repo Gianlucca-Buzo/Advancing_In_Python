@@ -1,5 +1,5 @@
 from pytest import raises,fixture
-from src.main.orcamento import ItemError,Item,Orcamento
+from src.main.orcamento import ItemError,Item,Orcamento,Aprovado,Reprovado,Em_aprovacao,Finalizado
 from src.main.calculador_de_descontos import Calculador_de_descontos
 from src.main.impostos import ISS,ICMS,ICPP,IKCV
 from src.main.calculador_de_impostos import Calculador_de_impostos
@@ -89,3 +89,39 @@ def test_caso_orcamento_custar_menos_ou_igual_a_500_reais_ou_nao_tiver_um_item_q
     imposto = calculador_de_impostos.realiza_calculo(orcamento,ISS(ICMS()))
 
     assert format(66.0,'.2f') == format(imposto,'.2f')
+
+def test_caso_orcamento_em_estado_em_aprovacao_aplicar_desconto_extra(itens_baratos):
+    orcamento = Orcamento(itens_baratos)
+
+    orcamento.aplica_desconto_extra()
+
+    assert format(98.0,'.2f') == format(orcamento.valor,'.2f')
+
+def test_caso_orcamento_em_estado_aprovado_aplicar_desconto_extra(itens_baratos):
+    orcamento = Orcamento(itens_baratos)
+    orcamento.aprova()
+    orcamento.aplica_desconto_extra()
+
+
+    assert format(95.0,'.2f') == format(orcamento.valor,'.2f')
+
+
+def test_caso_orcamento_em_estado_finalizado_gerar_excecao(itens_baratos):
+    orcamento = Orcamento(itens_baratos)
+    orcamento.aprova()
+    orcamento.finaliza()
+    with raises(Exception):
+        orcamento.aplica_desconto_extra()
+
+def test_caso_tenha_mudanca_invalida_de_estado_gerar_excecao(itens):
+    orcamento = Orcamento(itens)
+
+    with raises(Exception):
+        orcamento.finaliza()
+
+def test_caso_tente_aplicar_desconto_extra_mais_de_uma_vez_gera_excecao(itens):
+    orcamento = Orcamento(itens)
+    orcamento.aplica_desconto_extra()
+    orcamento.aprova()
+    with raises(Exception):
+        orcamento.aplica_desconto_extra()
